@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Maya Bangun Datar - SD Negeri 2 Negari</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Comic Neue & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comic Neue', cursive, 'Inter', sans-serif;
+            user-select: none;
+            overflow: hidden;
+            background-color: #0f172a;
+        }
+        .aspect-16-9-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 177.78vh; /* 16:9 aspect ratio cap */
+            max-height: 56.25vw;
+            margin: auto;
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .bounce-gentle {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-3%); }
+            50% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-slate-800">
+
+    <!-- Main Container 16:9 Aspect ratio maintained -->
+    <div id="appContainer" class="aspect-16-9-container bg-amber-50 rounded-2xl shadow-2xl border-4 border-amber-300 flex flex-col overflow-hidden relative">
+
+        <!-- Header / Navigation Bar -->
+        <header id="mainHeader" class="hidden bg-gradient-to-r from-teal-500 via-emerald-500 to-green-500 text-white px-4 py-2.5 flex justify-between items-center shadow-md shrink-0 z-10">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white p-2 rounded-xl text-teal-600 shadow-inner flex items-center justify-center w-10 h-10">
+                    <i class="fa-solid fa-shapes text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg md:text-xl leading-none text-amber-100">LAB MAYA BANGUN DATAR</h1>
+                    <p class="text-xs text-teal-100 font-sans mt-0.5">Fase A / Kelas 2 SD • SD Negeri 2 Negari</p>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <nav class="flex space-x-1 md:space-x-2 bg-teal-700/40 p-1 rounded-xl">
+                <button onclick="switchTab('teori')" id="tab-teori" class="nav-tab px-3 py-1.5 rounded-lg font-bold text-xs md:text-sm transition flex items-center space-x-1.5 bg-white text-teal-700 shadow">
+                    <i class="fa-solid fa-book-open"></i> <span class="hidden sm:inline">Teori</span>
+                </button>
+                <button onclick="switchTab('prosedur')" id="tab-prosedur" class="nav-tab px-3 py-1.5 rounded-lg font-bold text-xs md:text-sm transition flex items-center space-x-1.5 text-white hover:bg-teal-600/50">
+                    <i class="fa-solid fa-list-check"></i> <span class="hidden sm:inline">Prosedur</span>
+                </button>
+                <button onclick="switchTab('simulasi')" id="tab-simulasi" class="nav-tab px-3 py-1.5 rounded-lg font-bold text-xs md:text-sm transition flex items-center space-x-1.5 text-white hover:bg-teal-600/50">
+                    <i class="fa-solid fa-flask font-bold"></i> <span class="hidden sm:inline">Simulasi</span>
+                </button>
+                <button onclick="switchTab('lkpd')" id="tab-lkpd" class="nav-tab px-3 py-1.5 rounded-lg font-bold text-xs md:text-sm transition flex items-center space-x-1.5 text-white hover:bg-teal-600/50">
+                    <i class="fa-solid fa-pen-to-square"></i> <span class="hidden sm:inline">LKPD</span>
+                </button>
+                <button onclick="switchTab('pengembang')" id="tab-pengembang" class="nav-tab px-3 py-1.5 rounded-lg font-bold text-xs md:text-sm transition flex items-center space-x-1.5 text-white hover:bg-teal-600/50">
+                    <i class="fa-solid fa-user-gear"></i> <span class="hidden sm:inline">Pengembang</span>
+                </button>
+            </nav>
+
+            <!-- Audio Controls -->
+            <div class="flex items-center space-x-2">
+                <button onclick="toggleAudio()" id="audioBtn" class="bg-teal-700 hover:bg-teal-800 text-amber-200 p-2 rounded-xl transition shadow flex items-center justify-center w-9 h-9" title="Suara On/Off">
+                    <i class="fa-solid fa-volume-high text-base"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Area -->
+        <main id="contentArea" class="hidden flex-1 relative overflow-hidden bg-gradient-to-b from-amber-50 to-amber-100/50">
+
+            <!-- TAB 1: TEORI -->
+            <section id="sec-teori" class="tab-content h-full p-4 md:p-6 overflow-y-auto custom-scrollbar">
+                <div class="max-w-5xl mx-auto space-y-6">
+                    <div class="text-center">
+                        <span class="bg-amber-200 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Materi Belajar Fase A</span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-amber-900 mt-1">Mengenal Bangun Datar & Segi Banyak</h2>
+                        <p class="text-slate-600 text-xs md:text-sm">Klik kartu untuk mendengarkan penjelasan lengkap!</p>
+                    </div>
+
+                    <!-- Grid 1: Segi Banyak vs Bukan Segi Banyak -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Segi Banyak -->
+                        <div onclick="playAudioText('segiBanyakinfo')" class="cursor-pointer bg-white p-4 rounded-2xl shadow-md border-2 border-emerald-400 hover:shadow-lg hover:border-emerald-500 transition group relative">
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-emerald-100 p-3 rounded-xl text-emerald-600 font-bold text-2xl group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-draw-polygon"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-emerald-800">1. Segi Banyak</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Bangun datar tertutup yang dibatasi oleh **garis lurus**. Memiliki minimal 3 sisi lurus dan 3 titik sudut.</p>
+                                    <div class="mt-3 flex space-x-2">
+                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-2 py-1 rounded-lg border border-emerald-200">Segitiga</span>
+                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-2 py-1 rounded-lg border border-emerald-200">Segi Empat</span>
+                                        <span class="bg-emerald-50 text-emerald-700 text-xs px-2 py-1 rounded-lg border border-emerald-200">Segi Lima</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="absolute top-3 right-3 text-emerald-400 group-hover:text-emerald-600"><i class="fa-solid fa-volume-high"></i></span>
+                        </div>
+
+                        <!-- Bukan Segi Banyak -->
+                        <div onclick="playAudioText('bukanSegiBanyakinfo')" class="cursor-pointer bg-white p-4 rounded-2xl shadow-md border-2 border-rose-400 hover:shadow-lg hover:border-rose-500 transition group relative">
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-rose-100 p-3 rounded-xl text-rose-600 font-bold text-2xl group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-icons"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-rose-800">2. Bukan Segi Banyak</h3>
+                                    <p class="text-xs text-slate-600 mt-1">Bangun datar yang dibatasi oleh **garis lengkung** atau **kurva tidak tertutup** (terbuka).</p>
+                                    <div class="mt-3 flex space-x-2">
+                                        <span class="bg-rose-50 text-rose-700 text-xs px-2 py-1 rounded-lg border border-rose-200">Lingkaran</span>
+                                        <span class="bg-rose-50 text-rose-700 text-xs px-2 py-1 rounded-lg border border-rose-200">Bentuk Awan</span>
+                                        <span class="bg-rose-50 text-rose-700 text-xs px-2 py-1 rounded-lg border border-rose-200">Garis Terbuka</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="absolute top-3 right-3 text-rose-400 group-hover:text-rose-600"><i class="fa-solid fa-volume-high"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- Ciri Ciri Bangun Datar -->
+                    <div class="bg-white p-5 rounded-2xl shadow-md border-2 border-amber-200">
+                        <h3 class="text-lg font-bold text-amber-900 mb-3 flex items-center">
+                            <i class="fa-solid fa-star text-amber-500 mr-2"></i> Ciri-Ciri Bangun Datar Utama
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <!-- Segitiga -->
+                            <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-center">
+                                <svg class="w-16 h-16 mx-auto text-amber-600 mb-2" viewBox="0 0 100 100">
+                                    <polygon points="50,15 15,85 85,85" fill="#fde68a" stroke="#d97706" stroke-width="6"/>
+                                </svg>
+                                <h4 class="font-bold text-amber-900">Segitiga</h4>
+                                <ul class="text-xs text-slate-600 mt-1 space-y-0.5 text-left pl-2">
+                                    <li>• Sisi Lurus: 3</li>
+                                    <li>• Titik Sudut: 3</li>
+                                    <li>• Segi Banyak</li>
+                                </ul>
+                            </div>
+                            <!-- Segi Empat -->
+                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-center">
+                                <svg class="w-16 h-16 mx-auto text-blue-600 mb-2" viewBox="0 0 100 100">
+                                    <rect x="20" y="20" width="60" height="60" fill="#bfdbfe" stroke="#2563eb" stroke-width="6" rx="2"/>
+                                </svg>
+                                <h4 class="font-bold text-blue-900">Segi Empat</h4>
+                                <ul class="text-xs text-slate-600 mt-1 space-y-0.5 text-left pl-2">
+                                    <li>• Sisi Lurus: 4</li>
+                                    <li>• Titik Sudut: 4</li>
+                                    <li>• Segi Banyak</li>
+                                </ul>
+                            </div>
+                            <!-- Segi Lima -->
+                            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-center">
+                                <svg class="w-16 h-16 mx-auto text-emerald-600 mb-2" viewBox="0 0 100 100">
+                                    <polygon points="50,15 90,40 75,85 25,85 10,40" fill="#a7f3d0" stroke="#059669" stroke-width="6"/>
+                                </svg>
+                                <h4 class="font-bold text-emerald-900">Segi Banyak</h4>
+                                <ul class="text-xs text-slate-600 mt-1 space-y-0.5 text-left pl-2">
+                                    <li>• Sisi Lurus: > 4</li>
+                                    <li>• Titik Sudut: > 4</li>
+                                    <li>• Segi Banyak</li>
+                                </ul>
+                            </div>
+                            <!-- Lingkaran -->
+                            <div class="bg-purple-50 p-3 rounded-xl border border-purple-200 text-center">
+                                <svg class="w-16 h-16 mx-auto text-purple-600 mb-2" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="35" fill="#e9d5ff" stroke="#9333ea" stroke-width="6"/>
+                                </svg>
+                                <h4 class="font-bold text-purple-900">Lingkaran</h4>
+                                <ul class="text-xs text-slate-600 mt-1 space-y-0.5 text-left pl-2">
+                                    <li>• Garis Lengkung: 1</li>
+                                    <li>• Titik Sudut: 0</li>
+                                    <li>• Bukan Segi Banyak</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: PROSEDUR -->
+            <section id="sec-prosedur" class="tab-content hidden h-full p-4 md:p-6 overflow-y-auto custom-scrollbar">
+                <div class="max-w-4xl mx-auto space-y-4">
+                    <div class="text-center mb-4">
+                        <span class="bg-teal-200 text-teal-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Petunjuk Penggunaan</span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-teal-900 mt-1">Langkah-Langkah Eksperimen Lab Maya</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-5 rounded-2xl shadow border-2 border-teal-200 flex flex-col items-center text-center">
+                            <div class="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold text-xl mb-3 shadow">1</div>
+                            <h3 class="font-bold text-slate-800 text-base">Pilih Mode Simulasi</h3>
+                            <p class="text-xs text-slate-600 mt-2">Buka Tab <b>Simulasi</b>. Kamu bisa memilih Mode 1 (Kelompokkan Bangun) atau Mode 2 (Detektif Bangun Datar).</p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl shadow border-2 border-teal-200 flex flex-col items-center text-center">
+                            <div class="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold text-xl mb-3 shadow">2</div>
+                            <h3 class="font-bold text-slate-800 text-base">Eksplorasi & Pengamatan</h3>
+                            <p class="text-xs text-slate-600 mt-2">Tarik dan lemparkan bangun datar ke wadah yang tepat, atau sentuh bangun datar untuk menghitung jumlah sisi dan sudutnya.</p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl shadow border-2 border-teal-200 flex flex-col items-center text-center">
+                            <div class="w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold text-xl mb-3 shadow">3</div>
+                            <h3 class="font-bold text-slate-800 text-base">Kerjakan Quiz (LKPD)</h3>
+                            <p class="text-xs text-slate-600 mt-2">Uji pemahamanmu di Tab <b>LKPD</b>. Jawab pertanyaan interaktif dan dapatkan nilai bintang secara langsung!</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-100 p-4 rounded-xl border border-amber-300 flex items-center space-x-3">
+                        <i class="fa-solid fa-lightbulb text-amber-600 text-2xl"></i>
+                        <p class="text-xs text-amber-900"><b>Tips Guru:</b> Bimbing siswa untuk memperhatikan perbedaan garis lurus (membentuk sudut) dan garis lengkung (seperti lingkaran) pada setiap sesi.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: SIMULASI -->
+            <section id="sec-simulasi" class="tab-content hidden h-full flex flex-col p-3 md:p-4">
+                <!-- Sub Mode Toggle Bar -->
+                <div class="flex justify-between items-center mb-3 bg-white p-2 rounded-xl shadow-sm border border-slate-200 shrink-0">
+                    <div class="flex space-x-2">
+                        <button onclick="setSimMode(1)" id="simMode1Btn" class="px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-teal-600 text-white shadow">
+                            <i class="fa-solid fa-boxes-packing mr-1"></i> Mode 1: Kelompokkan Bangun
+                        </button>
+                        <button onclick="setSimMode(2)" id="simMode2Btn" class="px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">
+                            <i class="fa-solid fa-magnifying-glass-chart mr-1"></i> Mode 2: Detektif Bangun
+                        </button>
+                    </div>
+                    <button onclick="resetSimulation()" class="bg-rose-500 hover:bg-rose-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow flex items-center space-x-1">
+                        <i class="fa-solid fa-rotate-right"></i> <span>Reset Lab</span>
+                    </button>
+                </div>
+
+                <!-- Mode 1 Content: Sorting Canvas / Boxes -->
+                <div id="simMode1" class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3 overflow-hidden">
+                    <!-- Dropzone 1: Segi Banyak -->
+                    <div id="dropSegiBanyak" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'segiBanyak')" class="bg-emerald-50/80 rounded-2xl border-4 border-dashed border-emerald-400 p-3 flex flex-col items-center overflow-y-auto relative transition-colors">
+                        <div class="bg-emerald-500 text-white font-bold text-xs md:text-sm px-4 py-1.5 rounded-full shadow mb-2 flex items-center">
+                            <i class="fa-solid fa-check-circle mr-1.5"></i> WADAH SEGI BANYAK
+                        </div>
+                        <p class="text-[10px] md:text-xs text-emerald-700 text-center mb-2">Geser bangun berlapis GARIS LURUS ke sini!</p>
+                        <div id="boxSegiBanyak" class="w-full flex-1 flex flex-wrap content-start justify-center gap-2 p-2"></div>
+                    </div>
+
+                    <!-- Shape Palette (Source) -->
+                    <div class="bg-amber-100/60 rounded-2xl border-2 border-amber-300 p-3 flex flex-col items-center justify-between overflow-hidden">
+                        <div class="text-center mb-2">
+                            <span class="font-bold text-amber-900 text-sm">PILIH & TARIK BANGUN</span>
+                            <p class="text-[11px] text-slate-500">Sentuh atau Drag ke wadah yang sesuai</p>
+                        </div>
+
+                        <div id="shapePalette" class="w-full flex-1 flex flex-wrap items-center justify-center gap-3 p-2 overflow-y-auto custom-scrollbar">
+                            <!-- Draggable elements injected by JS -->
+                        </div>
+
+                        <div id="simScoreText" class="text-xs font-bold text-teal-800 bg-white px-3 py-1.5 rounded-full border border-teal-200 shadow-sm mt-2">
+                            Tersisa: <span id="shapesRemaining">6</span> Bangun
+                        </div>
+                    </div>
+
+                    <!-- Dropzone 2: Bukan Segi Banyak -->
+                    <div id="dropBukanSegiBanyak" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'bukanSegiBanyak')" class="bg-rose-50/80 rounded-2xl border-4 border-dashed border-rose-400 p-3 flex flex-col items-center overflow-y-auto relative transition-colors">
+                        <div class="bg-rose-500 text-white font-bold text-xs md:text-sm px-4 py-1.5 rounded-full shadow mb-2 flex items-center">
+                            <i class="fa-solid fa-times-circle mr-1.5"></i> WADAH BUKAN SEGI BANYAK
+                        </div>
+                        <p class="text-[10px] md:text-xs text-rose-700 text-center mb-2">Geser bangun LENGKUNG / TERBUKA ke sini!</p>
+                        <div id="boxBukanSegiBanyak" class="w-full flex-1 flex flex-wrap content-start justify-center gap-2 p-2"></div>
+                    </div>
+                </div>
+
+                <!-- Mode 2 Content: Interactive Inspector -->
+                <div id="simMode2" class="hidden flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 bg-white rounded-2xl p-4 shadow border border-slate-200 overflow-y-auto">
+                    <!-- Inspector Canvas View -->
+                    <div class="flex flex-col items-center justify-center bg-slate-50 rounded-xl border-2 border-slate-200 p-4 relative">
+                        <div class="text-xs font-bold text-slate-500 mb-2">TAMPILAN BANGUN DATAR INTERAKTIF</div>
+                        <svg id="inspectorSvg" class="w-56 h-56 bg-white rounded-xl shadow-inner border border-slate-200" viewBox="0 0 200 200">
+                            <!-- Dynamic SVG polygon/path rendered by JS -->
+                        </svg>
+                        <div class="flex space-x-2 mt-4">
+                            <button onclick="inspectSelect('segitiga')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-100 text-amber-800 border border-amber-300 hover:bg-amber-200">Segitiga</button>
+                            <button onclick="inspectSelect('persegi')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-blue-100 text-blue-800 border border-blue-300 hover:bg-blue-200">Segi Empat</button>
+                            <button onclick="inspectSelect('pentagon')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200">Segi Lima</button>
+                            <button onclick="inspectSelect('lingkaran')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-purple-100 text-purple-800 border border-purple-300 hover:bg-purple-200">Lingkaran</button>
+                        </div>
+                    </div>
+
+                    <!-- Details Box -->
+                    <div class="flex flex-col justify-center space-y-3 p-2">
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                            <span class="text-xs text-amber-600 font-bold uppercase tracking-wider">Nama Bangun</span>
+                            <h3 id="inspectName" class="text-xl font-extrabold text-amber-900">Segitiga Sama Sisi</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-center">
+                                <span class="text-xs text-blue-600 font-bold">Jumlah Sisi</span>
+                                <div id="inspectSides" class="text-2xl font-black text-blue-800">3</div>
+                                <span class="text-[10px] text-blue-500">Garis Lurus</span>
+                            </div>
+                            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-center">
+                                <span class="text-xs text-emerald-600 font-bold">Jumlah Titik Sudut</span>
+                                <div id="inspectCorners" class="text-2xl font-black text-emerald-800">3</div>
+                                <span class="text-[10px] text-emerald-500">Pojok / Pertemuan Garis</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-100 p-3 rounded-xl border border-slate-300">
+                            <span class="text-xs text-slate-500 font-bold">Status Jenis Bangun:</span>
+                            <p id="inspectCategory" class="text-sm font-bold text-emerald-700 mt-0.5">✔ SEGI BANYAK (Kurva Tertutup & Garis Lurus)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: LKPD -->
+            <section id="sec-lkpd" class="tab-content hidden h-full p-4 md:p-6 overflow-y-auto custom-scrollbar">
+                <div class="max-w-3xl mx-auto space-y-5">
+                    <div class="bg-white p-4 rounded-2xl shadow border-2 border-amber-300 flex justify-between items-center">
+                        <div>
+                            <h2 class="text-xl font-bold text-amber-900">Lembar Kerja Peserta Didik (LKPD)</h2>
+                            <p class="text-xs text-slate-600">Jawablah pertanyaan berikut dengan memilih jawaban yang benar!</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-500">Skor Kamu:</span>
+                            <div id="quizScoreDisplay" class="text-2xl font-black text-emerald-600">0 / 100</div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Questions Container -->
+                    <div id="quizContainer" class="space-y-4">
+                        <!-- Questions will be dynamically loaded -->
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-between items-center pt-2">
+                        <button onclick="resetQuiz()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Ulangi Quiz
+                        </button>
+                        <button onclick="submitQuiz()" class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm shadow-md transition transform active:scale-95">
+                            <i class="fa-solid fa-check-double mr-1.5"></i> Periksa Jawaban
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: PENGEMBANG -->
+            <section id="sec-pengembang" class="tab-content hidden h-full p-4 md:p-6 overflow-y-auto custom-scrollbar flex items-center justify-center">
+                <div class="max-w-xl w-full bg-white rounded-3xl shadow-xl border-4 border-teal-300 p-6 text-center space-y-4 relative">
+                    <div class="w-24 h-24 bg-gradient-to-tr from-teal-400 to-emerald-500 rounded-full mx-auto p-1 shadow-lg flex items-center justify-center text-white text-4xl">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+
+                    <div>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Pengembang Media</span>
+                        <h2 class="text-2xl font-black text-slate-800 mt-2">I Komang Juliartawan, S.Pd.</h2>
+                        <p class="text-xs font-bold text-teal-600">Guru SD Negeri 2 Negari</p>
+                    </div>
+
+                    <div class="border-t border-b border-slate-100 py-3 text-xs text-slate-600 space-y-1">
+                        <p><b>Target Pembelajaran:</b> Matematika Fase A (Kelas 2 SD)</p>
+                        <p><b>Materi utama:</b> Bangun Datar, Segi Banyak & Bukan Segi Banyak</p>
+                        <p><b>Platform:</b> Interactive HTML5 Standalone Media (Web Audio API)</p>
+                    </div>
+
+                    <div class="text-[11px] text-slate-400">
+                        © 2026 SD Negeri 2 Negari. Hak Cipta Dilindungi.
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Splash Screen Overlay -->
+        <div id="splashScreen" class="absolute inset-0 bg-gradient-to-br from-teal-500 via-emerald-600 to-amber-500 flex flex-col items-center justify-center text-white p-6 z-50">
+            <div class="text-center max-w-lg space-y-4">
+                <div class="bg-white/20 p-4 rounded-3xl inline-block backdrop-blur-md shadow-2xl mb-2 bounce-gentle">
+                    <i class="fa-solid fa-shapes text-6xl text-amber-200"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black tracking-wide text-amber-100 drop-shadow">LAB MAYA BANGUN DATAR</h1>
+                    <p class="text-sm md:text-base font-semibold text-teal-100 mt-1">Matematika Fase A • Kelas 2 SD</p>
+                    <p class="text-xs text-emerald-200 mt-0.5">SD Negeri 2 Negari</p>
+                </div>
+
+                <!-- Loading Bar Component -->
+                <div class="w-64 mx-auto bg-teal-800/50 rounded-full h-3 border border-teal-300/40 p-0.5 relative overflow-hidden">
+                    <div id="loadingProgress" class="bg-gradient-to-r from-amber-300 to-yellow-400 h-full rounded-full w-0 transition-all duration-300"></div>
+                </div>
+
+                <div class="pt-2">
+                    <button id="startBtn" onclick="startApp()" class="hidden px-8 py-3 bg-amber-400 hover:bg-amber-300 text-amber-950 font-black text-lg rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition transform border-2 border-amber-200">
+                        <i class="fa-solid fa-play mr-2"></i> MULAI LAB MAYA
+                    </button>
+                    <p id="loadingText" class="text-xs text-amber-100 animate-pulse">Menyiapkan Perangkat Lab...</p>
+                </div>
+
+                <div class="text-[11px] text-teal-100/80 pt-4">
+                    Karya: <b>I Komang Juliartawan, S.Pd.</b> (SD Negeri 2 Negari)
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- AUDIO & LOGIC SCRIPT -->
+    <script>
+        /* Context Audio Web Synth (Fully offline, no asset files needed) */
+        let audioCtx = null;
+        let soundMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (soundMuted) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'success') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(250, now);
+                osc.frequency.linearRampToValueAtTime(150, now + 0.15);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (type === 'start') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.2);
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            }
+        }
+
+        function playAudioText(textKey) {
+            playSound('click');
+            // Speech Synthesis fallback for explanation reading
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let msgText = "";
+                if (textKey === 'segiBanyakinfo') {
+                    msgText = "Segi banyak adalah bangun datar tertutup yang dibatasi oleh garis lurus. Memiliki minimal 3 sisi dan 3 titik sudut.";
+                } else if (textKey === 'bukanSegiBanyakinfo') {
+                    msgText = "Bukan segi banyak adalah bangun datar yang dibatasi garis lengkung atau garisnya tidak tertutup.";
+                }
+                const utterance = new SpeechSynthesisUtterance(msgText);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleAudio() {
+            soundMuted = !soundMuted;
+            const btn = document.getElementById('audioBtn');
+            if (soundMuted) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-base"></i>';
+                btn.classList.replace('bg-teal-700', 'bg-slate-600');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high text-base"></i>';
+                btn.classList.replace('bg-slate-600', 'bg-teal-700');
+                playSound('click');
+            }
+        }
+
+        /* Splash Screen Loading Simulation */
+        window.addEventListener('load', () => {
+            const progressBar = document.getElementById('loadingProgress');
+            const loadingText = document.getElementById('loadingText');
+            const startBtn = document.getElementById('startBtn');
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 25;
+                progressBar.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    loadingText.classList.add('hidden');
+                    startBtn.classList.remove('hidden');
+                }
+            }, 150);
+        });
+
+        function startApp() {
+            playSound('start');
+            document.getElementById('splashScreen').classList.add('hidden');
+            document.getElementById('mainHeader').classList.remove('hidden');
+            document.getElementById('contentArea').classList.remove('hidden');
+            initSimMode1();
+            initQuiz();
+            inspectSelect('segitiga');
+        }
+
+        /* Navigation Switcher */
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(el => {
+                el.classList.remove('bg-white', 'text-teal-700', 'shadow');
+                el.classList.add('text-white', 'hover:bg-teal-600/50');
+            });
+
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`tab-${tabId}`);
+            activeNav.classList.add('bg-white', 'text-teal-700', 'shadow');
+            activeNav.classList.remove('text-white', 'hover:bg-teal-600/50');
+        }
+
+        /* Simulation Data & Logic */
+        const shapesData = [
+            { id: 's1', name: 'Segitiga', type: 'segiBanyak', svg: '<polygon points="25,5 5,45 45,45" fill="#fde68a" stroke="#d97706" stroke-width="3"/>' },
+            { id: 's2', name: 'Persegi', type: 'segiBanyak', svg: '<rect x="5" y="5" width="40" height="40" fill="#bfdbfe" stroke="#2563eb" stroke-width="3" rx="1"/>' },
+            { id: 's3', name: 'Lingkaran', type: 'bukanSegiBanyak', svg: '<circle cx="25" cy="25" r="20" fill="#e9d5ff" stroke="#9333ea" stroke-width="3"/>' },
+            { id: 's4', name: 'Segi Lima', type: 'segiBanyak', svg: '<polygon points="25,5 45,20 37,45 13,45 5,20" fill="#a7f3d0" stroke="#059669" stroke-width="3"/>' },
+            { id: 's5', name: 'Awan/Lengkung', type: 'bukanSegiBanyak', svg: '<path d="M10,30 Q15,10 25,20 Q35,10 40,30 Q45,40 25,40 Z" fill="#fbcfe8" stroke="#db2777" stroke-width="3"/>' },
+            { id: 's6', name: 'Garis Terbuka', type: 'bukanSegiBanyak', svg: '<path d="M5,40 L20,10 L35,40 L45,15" fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round"/>' }
+        ];
+
+        let currentRemaining = 6;
+
+        function initSimMode1() {
+            const palette = document.getElementById('shapePalette');
+            const box1 = document.getElementById('boxSegiBanyak');
+            const box2 = document.getElementById('boxBukanSegiBanyak');
+            palette.innerHTML = '';
+            box1.innerHTML = '';
+            box2.innerHTML = '';
+            currentRemaining = shapesData.length;
+            document.getElementById('shapesRemaining').innerText = currentRemaining;
+
+            shapesData.forEach(shape => {
+                const item = document.createElement('div');
+                item.id = `draggable-${shape.id}`;
+                item.className = 'w-16 h-16 bg-white rounded-xl border-2 border-slate-300 shadow hover:shadow-md cursor-grab flex flex-col items-center justify-center p-1 transform hover:scale-105 transition';
+                item.setAttribute('draggable', 'true');
+                item.setAttribute('ondragstart', 'handleDragStart(event)');
+                item.setAttribute('onclick', `mobileAutoSort('${shape.id}')`);
+                item.dataset.type = shape.type;
+                item.dataset.id = shape.id;
+                item.innerHTML = `<svg class="w-10 h-10">${shape.svg}</svg><span class="text-[9px] font-bold text-slate-600 mt-0.5">${shape.name}</span>`;
+                palette.appendChild(item);
+            });
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+        }
+
+        function allowDrop(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e, targetType) {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text/plain');
+            const draggedEl = document.getElementById(id);
+            if (!draggedEl) return;
+
+            checkAndMoveShape(draggedEl, targetType);
+        }
+
+        function mobileAutoSort(shapeId) {
+            const draggedEl = document.getElementById(`draggable-${shapeId}`);
+            if (!draggedEl) return;
+            // Quick click fallback for mobile screen touch
+            const correctType = draggedEl.dataset.type;
+            checkAndMoveShape(draggedEl, correctType);
+        }
+
+        function checkAndMoveShape(element, targetType) {
+            const shapeType = element.dataset.type;
+            if (shapeType === targetType) {
+                playSound('success');
+                element.classList.remove('cursor-grab', 'hover:scale-105');
+                element.removeAttribute('draggable');
+
+                if (targetType === 'segiBanyak') {
+                    document.getElementById('boxSegiBanyak').appendChild(element);
+                } else {
+                    document.getElementById('boxBukanSegiBanyak').appendChild(element);
+                }
+                currentRemaining--;
+                document.getElementById('shapesRemaining').innerText = currentRemaining;
+                if (currentRemaining === 0) {
+                    setTimeout(() => playSound('success'), 200);
+                }
+            } else {
+                playSound('error');
+            }
+        }
+
+        function setSimMode(mode) {
+            playSound('click');
+            if (mode === 1) {
+                document.getElementById('simMode1').classList.remove('hidden');
+                document.getElementById('simMode2').classList.add('hidden');
+                document.getElementById('simMode1Btn').className = 'px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-teal-600 text-white shadow';
+                document.getElementById('simMode2Btn').className = 'px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+            } else {
+                document.getElementById('simMode1').classList.add('hidden');
+                document.getElementById('simMode2').classList.remove('hidden');
+                document.getElementById('simMode2Btn').className = 'px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-teal-600 text-white shadow';
+                document.getElementById('simMode1Btn').className = 'px-3 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+            }
+        }
+
+        function resetSimulation() {
+            playSound('click');
+            initSimMode1();
+        }
+
+        /* Mode 2: Inspector Data */
+        const inspectorShapes = {
+            segitiga: {
+                name: 'Segitiga Sama Sisi',
+                sides: 3,
+                corners: 3,
+                category: '✔ SEGI BANYAK (Kurva Tertutup & 3 Garis Lurus)',
+                svg: '<polygon points="100,30 30,160 170,160" fill="#fde68a" stroke="#d97706" stroke-width="8"/><circle cx="100" cy="30" r="8" fill="#dc2626"/><circle cx="30" cy="160" r="8" fill="#dc2626"/><circle cx="170" cy="160" r="8" fill="#dc2626"/>'
+            },
+            persegi: {
+                name: 'Segi Empat (Persegi)',
+                sides: 4,
+                corners: 4,
+                category: '✔ SEGI BANYAK (Kurva Tertutup & 4 Garis Lurus)',
+                svg: '<rect x="40" y="40" width="120" height="120" fill="#bfdbfe" stroke="#2563eb" stroke-width="8" rx="2"/><circle cx="40" cy="40" r="8" fill="#dc2626"/><circle cx="160" cy="40" r="8" fill="#dc2626"/><circle cx="160" cy="160" r="8" fill="#dc2626"/><circle cx="40" cy="160" r="8" fill="#dc2626"/>'
+            },
+            pentagon: {
+                name: 'Segi Lima (Pentagon)',
+                sides: 5,
+                corners: 5,
+                category: '✔ SEGI BANYAK (Kurva Tertutup & 5 Garis Lurus)',
+                svg: '<polygon points="100,20 175,75 145,165 55,165 25,75" fill="#a7f3d0" stroke="#059669" stroke-width="8"/><circle cx="100" cy="20" r="8" fill="#dc2626"/><circle cx="175" cy="75" r="8" fill="#dc2626"/><circle cx="145" cy="165" r="8" fill="#dc2626"/><circle cx="55" cy="165" r="8" fill="#dc2626"/><circle cx="25" cy="75" r="8" fill="#dc2626"/>'
+            },
+            lingkaran: {
+                name: 'Lingkaran',
+                sides: 1,
+                corners: 0,
+                category: '❌ BUKAN SEGI BANYAK (Garis Lengkung, Tidak Punya Titik Sudut)',
+                svg: '<circle cx="100" cy="100" r="70" fill="#e9d5ff" stroke="#9333ea" stroke-width="8"/>'
+            }
+        };
+
+        function inspectSelect(type) {
+            playSound('click');
+            const data = inspectorShapes[type];
+            document.getElementById('inspectorSvg').innerHTML = data.svg;
+            document.getElementById('inspectName').innerText = data.name;
+            document.getElementById('inspectSides').innerText = data.sides;
+            document.getElementById('inspectCorners').innerText = data.corners;
+            document.getElementById('inspectCategory').innerText = data.category;
+        }
+
+        /* LKPD / Quiz Section Data & Logic */
+        const quizQuestions = [
+            {
+                q: '1. Manakah ciri utama dari sebuah Segi Banyak?',
+                options: ['Dibatasi oleh garis lurus dan tertutup', 'Dibatasi oleh garis lengkung', 'Garisnya selalu terbuka'],
+                answer: 0
+            },
+            {
+                q: '2. Berapakah jumlah titik sudut yang dimiliki oleh bangun Segitiga?',
+                options: ['4 titik sudut', '3 titik sudut', '0 titik sudut'],
+                answer: 1
+            },
+            {
+                q: '3. Mengapa Lingkaran termasuk BUKAN Segi Banyak?',
+                options: ['Karena mempunyai 4 sisi lurus', 'Karena dibatasi oleh garis lengkung dan tidak punya titik sudut', 'Karena berbentuk kotak'],
+                answer: 1
+            },
+            {
+                q: '4. Bangun datar yang memiliki 4 sisi lurus dan 4 titik sudut dinamakan...',
+                options: ['Segitiga', 'Lingkaran', 'Segi Empat'],
+                answer: 2
+            }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            quizQuestions.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded-2xl shadow border border-slate-200 space-y-2';
+
+                let optionsHtml = '';
+                item.options.forEach((opt, optIdx) => {
+                    optionsHtml += `
+                        <label class="flex items-center space-x-2 p-2 rounded-xl border border-slate-100 hover:bg-amber-50 cursor-pointer transition">
+                            <input type="radio" name="q${index}" value="${optIdx}" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
+                            <span class="text-xs md:text-sm font-medium text-slate-700">${opt}</span>
+                        </label>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <p class="font-bold text-slate-800 text-sm md:text-base">${item.q}</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1">
+                        ${optionsHtml}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const total = quizQuestions.length;
+
+            quizQuestions.forEach((item, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && parseInt(selected.value) === item.answer) {
+                    score += (100 / total);
+                }
+            });
+
+            document.getElementById('quizScoreDisplay').innerText = `${score} / 100`;
+
+            if (score >= 75) {
+                playSound('success');
+            } else {
+                playSound('error');
+            }
+        }
+
+        function resetQuiz() {
+            playSound('click');
+            initQuiz();
+            document.getElementById('quizScoreDisplay').innerText = `0 / 100`;
+        }
+    </script>
+</body>
+</html>
